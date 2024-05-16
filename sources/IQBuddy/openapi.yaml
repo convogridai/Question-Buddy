@@ -1,0 +1,441 @@
+openapi: 3.0.0
+info:
+  title: IQBuddy API
+  description: IQBuddy API Resources
+  version: 1.0.0
+
+paths:
+  /oauth2/token:
+      post:
+        summary: Authentication 
+        tags:
+          - Authentication
+        requestBody:
+          description: Token Request
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/components/schemas/Oauth2TokenRequest'
+        responses:
+            200:
+              description: Token Request
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Oauth2TokenResponse"
+                        
+          
+  /open-ai/conversations:
+      post:
+        summary: Conversation with OpenAI model
+        tags:
+          - OpenAI
+        security:
+          - bearerAuth: []
+        parameters:
+        - in: header
+          name: correlation-id
+          schema:
+            type: string
+            format: uuid
+        requestBody:
+          description: Conversation Request
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAIConversationsRequest'
+        responses:
+            200:
+              description: Conversation Response
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: 
+                      status:
+                        enum: ["success","error"]
+                        example: success
+                      data:
+                        $ref: "#/components/schemas/OpenAIConversationsResponse"
+            400:
+              description: Invalid request
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/BadRequestResponse"
+            401:
+              description: User authentication failed
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/UnauthenticatedResponse"
+        
+            403:
+              description: User authorization failed
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/UnauthorizedResponse"
+            404:
+                description: Resource not found
+                content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/NotFoundResponse"
+            500:
+                description: Internal server failure
+                content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/InternalServerErrorResponse"
+                        
+  /gemini/conversations:
+      post:
+        summary: Conversation with Gemini model
+        tags:
+          - Gemini
+        security:
+          - bearerAuth: []
+        parameters:
+        - in: header
+          name: correlation-id
+          schema:
+            type: string
+            format: uuid
+        requestBody:
+          description: Conversation Request
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeminiConversationsRequest'
+        responses:
+            200:
+              description: Conversation Response
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: 
+                      status:
+                        enum: ["success","error"]
+                        example: success
+                      data:
+                        $ref: "#/components/schemas/GeminiConversationsResponse"
+            400:
+              description: Invalid request
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/BadRequestResponse"
+            401:
+              description: User authentication failed
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/UnauthenticatedResponse"
+        
+            403:
+              description: User authorization failed
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/UnauthorizedResponse"
+            404:
+                description: Resource not found
+                content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/NotFoundResponse"
+            500:
+                description: Internal server failure
+                content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/InternalServerErrorResponse"
+                        
+components:
+  securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+  schemas:
+  
+    Oauth2TokenRequest:
+      description: Authentication token request
+      type: object
+      properties:
+        client_id:
+          type: string
+          example: "3ODkwIiwibmFtZSI6Ikpva"
+        client_secret:
+          type: string
+          example: "3ODkwIiwibmFtZSI6Ikpva"
+        grant_type:
+          enum: ["client_credentials"]
+          example: "client_credentials"
+        scope:
+          enum: ["conversation_create"]
+          example: "conversation_create"
+      required:
+        - client_id
+        - client_secret
+        - grant_type
+        - scope
+          
+    Oauth2TokenResponse:
+      description: Authentication token response
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        token_type:
+          enum: ["Bearer"]
+          example: Bearer
+        expires_in:
+          type: number
+          format: int32
+          example: 3600
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        scope:
+          type: string
+          example: "conversation_create"
+      required:
+        - access_token
+        - token_type
+        - expires_in
+        
+    OpenAIConversationsRequest:
+      description: Conversation Requests to Open AI.
+      type: object
+      properties:
+         conversationRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenAIConversionRequest"
+      required:
+        - conversationRequests
+      
+    OpenAIConversationsResponse:
+      description: Conversation Results from Open AI.
+      type: object
+      properties: 
+        conversationRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenAIConversionRequest"
+        conversationResponses:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpenAIConversionResponse"
+      required:
+        - conversationRequests
+        - conversationResponses
+    
+    OpenAIConversionRequest:
+      description: Conversation request to OpenAI.
+      type: object
+      properties: 
+        conversationId:
+          type: string
+          format: uuid
+          example: 3165db2a-6dfa-400e-971c-0fadb4c1114d
+        request:
+          type: string
+          example: What does ConvoGrid do?
+      required:
+        - conversationId
+        - request
+          
+    OpenAIConversionResponse:
+      description: Conversation response from OpenAI.
+      type: object
+      properties: 
+        conversationId:
+          type: string
+          format: uuid
+          example: 3165db2a-6dfa-400e-971c-0fadb4c1114d
+        response:
+          type: string
+          example: Pioneering the New Age of Conversational Experiences
+          nullable: true
+      required:
+        - conversationId
+        - response
+          
+    GeminiConversationsRequest:
+      description: Conversation Requests to Gemini.
+      type: object
+      properties:
+         conversationRequests:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeminiConversionRequest"
+      required:
+        - conversationRequests
+    
+    GeminiConversationsResponse:
+      description: Conversation Results from Gemini.
+      type: object
+      properties: 
+        conversations:
+          type: array
+          items:
+            $ref: "#/components/schemas/GeminiConversion"
+      required:
+        - conversations
+      
+    GeminiConversionRequest:
+      description: Conversation request to OpenAI.
+      type: object
+      properties: 
+        conversationId:
+          type: string
+          format: uuid
+          example: 3165db2a-6dfa-400e-971c-0fadb4c1114d
+        request:
+          type: string
+          example: What does ConvoGrid do? 
+      required:
+        - conversationId
+        - request
+        
+    GeminiConversion:
+      description: Conversation response from OpenAI.
+      type: object
+      properties: 
+        conversationId:
+          type: string
+          example: 3165db2a-6dfa-400e-971c-0fadb4c1114d
+        request:
+          type: string
+          example: What does ConvoGrid do? 
+        response:
+          type: string
+          example: Pioneering the New Age of Conversational Experiences
+          nullable: true
+      required:
+        - conversationId
+        - request
+        - response
+  
+    UnauthenticatedResponse: 
+      description: The request requires authentication.
+      type: object
+      properties: 
+        status:
+          enum: ["success","error"]
+          example: error
+        data:
+          $ref: "#/components/schemas/Unauthenticated"
+      required:
+        - status
+        - data
+    
+    UnauthorizedResponse:
+      description: The requestor doesn't have necessary permission.
+      type: object
+      properties: 
+        status:
+          enum: ["success","error"]
+          example: error
+        data:
+          $ref: "#/components/schemas/Unauthorized"
+      required:
+        - status
+        - data
+            
+    Unauthenticated:
+      description: The request requires authentication.
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+      required:
+        - message
+    
+    Unauthorized:
+      description: The requestor doesn't have necessary permission.
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+      required:
+        - message
+    
+    BadRequestResponse: 
+      description: The request is malformed.
+      type: object
+      properties: 
+        status:
+          enum: ["success","error"]
+          example: error
+        data:
+          $ref: "#/components/schemas/BadRequest"
+      required:
+        - status
+        - data
+    
+    BadRequest:
+      description: The request is malformed.
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+      required:
+        - message
+    
+    NotFoundResponse: 
+      description: The resource was not found.
+      type: object
+      properties: 
+        status:
+          enum: ["success","error"]
+          example: error
+        data:
+          $ref: "#/components/schemas/NotFound"
+      required:
+        - status
+        - data
+    
+    NotFound:
+      description: The resource was not found.
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+      required:
+        - message
+    
+    InternalServerErrorResponse: 
+      description: The resource was not found.
+      type: object
+      properties: 
+        status:
+          enum: ["success","error"]
+          example: error
+        data:
+          $ref: "#/components/schemas/InternalServerError"
+      required:
+        - status
+        - data
+          
+    InternalServerError:
+      description: An unexpected error occurred.
+      type: object
+      properties:
+        message:
+          type: string
+          description: The error message
+      required:
+        - message
