@@ -40,7 +40,7 @@ Question Buddy is not just an answering machine. It tracks the following informa
 None of the above information is exposed via Question Buddy. They are only stored for future reference.
 
 
-## Bird's Eye view of Question Buddy
+## Bird's eye view of Question Buddy
 ![Bird's Eye View](./sources/QuestionBuddy.png)
 
 
