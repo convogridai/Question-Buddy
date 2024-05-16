@@ -18,7 +18,7 @@ Buddy Backend interacts with the Buddy Frontend. All requests from Buddy Fronten
 
 
 ###  Response Rover
-Response Rover is the microservice that resolves queries coming from the Buddy Backend. When Buddy Backend sends a question list, Response Rover sends those questions to IQ Buddy and sends the responses back. Response Rover has a well-defined API specification and it works according to that. IQ Buddy sits behind an authentication layer so it's Response Rover's responsibility is to use provide proper credentials and get the job done. 
+Response Rover is the microservice that resolves queries coming from the Buddy Backend. When Buddy Backend sends a question list, Response Rover sends those questions to IQ Buddy and sends the responses back. Response Rover has a well-defined API specification and it works according to that. IQ Buddy sits behind an authentication layer so it's Response Rover's responsibility is to use proper credentials and get the job done. 
 
 
 ### IQ Buddy 
