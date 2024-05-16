@@ -54,7 +54,7 @@ You are going to build the Question Buddy by implementing
 - This needs to be a NextJS (14) application. 
 - Authentication must be handled within the NextJS application. 
 - Buddy Backend should communicate with the Response Rover to get answers for user's questions. 
-- Unfortunately, IQ Buddy is not very intelligent (yet). It can only answer to set of pre-trained questions. So question files are already prepared and publicly available.
+- Unfortunately, IQ Buddy is not very intelligent (yet). It can only answer to pre-trained questions. So question files are already prepared and publicly available.
 - Question files are available in https://qna.convogrid.ai?id=identifier. When you visit the URL a JSON file of questions will be downloaded.
 - Keep in mind a file is only valid for 2 hours after initial download. You can download a new file by visiting the above URL after the current file is expired. 
 - The `identifier` will be shared with you separately.
