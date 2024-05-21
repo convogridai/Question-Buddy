@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: Response Rover API
+  description: Response Rover API Resources
+  version: 1.0.0
+servers:
+  - url: https://rover.convogrid.ai/v1
+  
+paths:
+                        
+  /questions:
+      post:
+        summary: Ask questions from Response Rover
+        tags:
+          - Questions
+        parameters:
+        - in: header
+          name: correlation-id
+          schema:
+            type: string
+            format: uuid
+        requestBody:
+          description: Question Request
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestionsRequest'
+        responses:
+            200:
+              description: Question Response
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties: 
+                      status:
+                        enum: ["success","error"]
+                        example: success
+                      data:
+                        $ref: "#/components/schemas/QuestionsResponse"
+            400:
+              description: Invalid request
+              content:
+                application/json:
+                  schema:
+                      $ref: "#/components/schemas/BadRequestResponse"
+
+            404:
+                description: Resource not found
+                content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/NotFoundResponse"
+            500:
+                description: Internal server failure
+                content:
+                  application/json:
+                    schema:
+                        $ref: "#/components/schemas/InternalServerErrorResponse"
+                        
+ 
+                        
+components:
+
+  schemas:
+  
+    QuestionsRequest:
+      description: Questions to Response Rover.
+      type: object
+      properties:
+         queries:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionRequest"
+      required:
+        - queries
+      
+    
+    QuestionRequest:
+      description: Question to Response Rover.
+      type: object
+      properties: 
+        questionId:
+          type: string
+          format: uuid
+          example: 3165db2a-6dfa-400e-971c-0fadb4c1114d
+        request:
+          type: string
+          example: What does ConvoGrid do?
+      required:
+        - questionId
+        - request
+          
+        
+    QuestionsResponse:
+      description: Answers from Response Rover.
+      type: object
+      properties: 
+        queries:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionResponse"
+      required:
+        - queries
+      
+    QuestionResponse:
+      description: Answer from Response Rover.
+      type: object
+      properties: 
+        questionId:
+          type: string
+          format: uuid
+          example: 3165db2a-6dfa-400e-971c-0fadb4c1114d
+        request:
+          type: string
+          example: What does ConvoGrid do? 
+        response:
+          type: string
+          example: Pioneering the New Age of Conversational Experiences
+          nullable: true
+      required:
+        - questionId
+        - request
+        - response
+  
+    
+            
+    BadRequestResponse: 
+      description: The request is malformed or invalid.
+      type: object
+      properties: 
+        message:
+          oneOf:
+              - $ref: '#/components/schemas/BadRequestMessage'
+              - $ref: '#/components/schemas/BadRequestObject'
+        error:
+          type: string
+          example: "Bad Request"
+        statusCode:
+          type: number
+          example: 400
+      required:
+        - message
+        - error
+        - statusCode
+    
+    
+    NotFoundResponse: 
+      description: The resource was not found.
+      type: object
+      properties: 
+        message:
+          type: string
+          example: "Cannot POST /v1/not-found"
+        error:
+          type: string
+          example: "Not Found"
+        statusCode:
+          type: number
+          example: 404
+      required:
+        - message
+        - error
+        - statusCode
+    
+    InternalServerErrorResponse: 
+      description: There is an internal server error.
+      type: object
+      properties: 
+        message:
+          type: string
+          example: "Internal Server Error"
+        error:
+          type: string
+          example: "Internal Server Error"
+        statusCode:
+          type: number
+          example: 500
+      required:
+        - message
+        - error
+        - statusCode
+        
+    BadRequestObject:
+      description: "The error object is created based on the request object. It contains attribute names as keys and lists of errors as values."
+      type: object
+      
+    BadRequestMessage: 
+      type: string
+      example: "Expected double-quoted property name in JSON at position 101"
+  
