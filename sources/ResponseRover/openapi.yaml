@@ -1,4 +1,5 @@
 openapi: 3.0.0
+
 info:
   title: Response Rover API
   description: Response Rover API Resources
@@ -6,8 +7,7 @@ info:
 servers:
   - url: https://rover.convogrid.ai/v1
   
-paths:
-                        
+paths:                        
   /questions:
       post:
         summary: Ask questions from Response Rover
@@ -58,13 +58,9 @@ paths:
                   application/json:
                     schema:
                         $ref: "#/components/schemas/InternalServerErrorResponse"
-                        
- 
-                        
+                                        
 components:
-
-  schemas:
-  
+  schemas:  
     QuestionsRequest:
       description: Questions to Response Rover.
       type: object
@@ -74,9 +70,7 @@ components:
           items:
             $ref: "#/components/schemas/QuestionRequest"
       required:
-        - queries
-      
-    
+        - queries   
     QuestionRequest:
       description: Question to Response Rover.
       type: object
@@ -90,9 +84,7 @@ components:
           example: What does ConvoGrid do?
       required:
         - questionId
-        - request
-          
-        
+        - request            
     QuestionsResponse:
       description: Answers from Response Rover.
       type: object
@@ -102,8 +94,7 @@ components:
           items:
             $ref: "#/components/schemas/QuestionResponse"
       required:
-        - queries
-      
+        - queries  
     QuestionResponse:
       description: Answer from Response Rover.
       type: object
@@ -123,9 +114,6 @@ components:
         - questionId
         - request
         - response
-  
-    
-            
     BadRequestResponse: 
       description: The request is malformed or invalid.
       type: object
@@ -143,9 +131,7 @@ components:
       required:
         - message
         - error
-        - statusCode
-    
-    
+        - statusCode 
     NotFoundResponse: 
       description: The resource was not found.
       type: object
@@ -162,8 +148,7 @@ components:
       required:
         - message
         - error
-        - statusCode
-    
+        - statusCode 
     InternalServerErrorResponse: 
       description: There is an internal server error.
       type: object
@@ -180,12 +165,10 @@ components:
       required:
         - message
         - error
-        - statusCode
-        
+        - statusCode 
     BadRequestObject:
       description: "The error object is created based on the request object. It contains attribute names as keys and lists of errors as values."
-      type: object
-      
+      type: object   
     BadRequestMessage: 
       type: string
       example: "Expected double-quoted property name in JSON at position 101"
