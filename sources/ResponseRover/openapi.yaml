@@ -1,12 +1,10 @@
 openapi: 3.0.0
-
 info:
   title: Response Rover API
   description: Response Rover API Resources
   version: 1.0.0
 servers:
-  - url: https://rover.convogrid.ai/v1
-  
+  - url: https://rover.convogrid.ai/v1 
 paths:                        
   /questions:
       post:
@@ -57,8 +55,7 @@ paths:
                 content:
                   application/json:
                     schema:
-                        $ref: "#/components/schemas/InternalServerErrorResponse"
-                                        
+                        $ref: "#/components/schemas/InternalServerErrorResponse"                                        
 components:
   schemas:  
     QuestionsRequest:
