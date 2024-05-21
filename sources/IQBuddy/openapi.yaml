@@ -5,7 +5,6 @@ info:
   version: 1.0.0
 servers:
   - url: https://iqbuddy.convogrid.ai/v1
-  
 paths:
   /oauth2/token:
       post:
@@ -25,9 +24,7 @@ paths:
               content:
                 application/json:
                   schema:
-                    $ref: "#/components/schemas/Oauth2TokenResponse"
-                        
-          
+                    $ref: "#/components/schemas/Oauth2TokenResponse"                                
   /open-ai/conversations:
       post:
         summary: Conversation with OpenAI model
@@ -92,8 +89,7 @@ paths:
                 content:
                   application/json:
                     schema:
-                        $ref: "#/components/schemas/InternalServerErrorResponse"
-                        
+                        $ref: "#/components/schemas/InternalServerErrorResponse"                        
   /gemini/conversations:
       post:
         summary: Conversation with Gemini model
@@ -158,8 +154,7 @@ paths:
                 content:
                   application/json:
                     schema:
-                        $ref: "#/components/schemas/InternalServerErrorResponse"
-                        
+                        $ref: "#/components/schemas/InternalServerErrorResponse"                      
 components:
   securitySchemes:
       bearerAuth:
@@ -167,7 +162,6 @@ components:
         scheme: bearer
         bearerFormat: JWT
   schemas:
-  
     Oauth2TokenRequest:
       description: Authentication token request
       type: object
@@ -188,8 +182,7 @@ components:
         - client_id
         - client_secret
         - grant_type
-        - scope
-          
+        - scope       
     Oauth2TokenResponse:
       description: Authentication token response
       type: object
@@ -213,8 +206,7 @@ components:
       required:
         - access_token
         - token_type
-        - expires_in
-        
+        - expires_in 
     OpenAIConversationsRequest:
       description: Conversation Requests to Open AI.
       type: object
@@ -225,7 +217,6 @@ components:
             $ref: "#/components/schemas/OpenAIConversionRequest"
       required:
         - conversationRequests
-      
     OpenAIConversationsResponse:
       description: Conversation Results from Open AI.
       type: object
@@ -241,7 +232,6 @@ components:
       required:
         - conversationRequests
         - conversationResponses
-    
     OpenAIConversionRequest:
       description: Conversation request to OpenAI.
       type: object
@@ -255,8 +245,7 @@ components:
           example: What does ConvoGrid do?
       required:
         - conversationId
-        - request
-          
+        - request   
     OpenAIConversionResponse:
       description: Conversation response from OpenAI.
       type: object
@@ -272,7 +261,6 @@ components:
       required:
         - conversationId
         - response
-          
     GeminiConversationsRequest:
       description: Conversation Requests to Gemini.
       type: object
@@ -283,7 +271,6 @@ components:
             $ref: "#/components/schemas/GeminiConversionRequest"
       required:
         - conversationRequests
-    
     GeminiConversationsResponse:
       description: Conversation Results from Gemini.
       type: object
@@ -294,7 +281,6 @@ components:
             $ref: "#/components/schemas/GeminiConversion"
       required:
         - conversations
-      
     GeminiConversionRequest:
       description: Conversation request to OpenAI.
       type: object
@@ -309,7 +295,6 @@ components:
       required:
         - conversationId
         - request
-        
     GeminiConversion:
       description: Conversation response from OpenAI.
       type: object
@@ -329,7 +314,6 @@ components:
         - conversationId
         - request
         - response
-  
     UnauthenticatedResponse: 
       description: The request requires authentication.
       type: object
@@ -347,7 +331,6 @@ components:
         - message
         - error
         - statusCode
-    
     UnauthorizedResponse:
       description: The requestor doesn't have necessary permission.
       type: object
@@ -364,8 +347,7 @@ components:
       required:
         - message
         - error
-        - statusCode
-            
+        - statusCode  
     BadRequestResponse: 
       description: The request is malformed or invalid.
       type: object
@@ -384,8 +366,6 @@ components:
         - message
         - error
         - statusCode
-    
-    
     NotFoundResponse: 
       description: The resource was not found.
       type: object
@@ -403,7 +383,6 @@ components:
         - message
         - error
         - statusCode
-    
     InternalServerErrorResponse: 
       description: There is an internal server error.
       type: object
@@ -421,11 +400,9 @@ components:
         - message
         - error
         - statusCode
-        
     BadRequestObject:
       description: "The error object is created based on the request object. It contains attribute names as keys and lists of errors as values."
       type: object
-      
     BadRequestMessage: 
       type: string
       example: "Expected double-quoted property name in JSON at position 101"
